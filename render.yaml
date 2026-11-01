@@ -1,0 +1,26 @@
+# Render Blueprint — deploys the CodeTrack API from the server/ folder.
+# Connect this repo in Render Dashboard > New > Blueprint, then set the
+# MONGODB_URI / JWT_SECRET environment variables it asks for.
+services:
+  - type: web
+    name: codetrack-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      # Set in the Render dashboard (do NOT commit real values):
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      # Comma-separated list of allowed frontend origins.
+      - key: CLIENT_URL
+        sync: false
