@@ -80,13 +80,15 @@ const updateProblemRules = [
 const idParamRule = [param('id').isMongoId().withMessage('Invalid id')];
 
 const listProblemsRules = [
-  query('page').optional().custom(toNumber).isInt({ min: 1 }).withMessage('page must be a positive integer'),
-  query('limit').optional().custom(toNumber).isInt({ min: 1, max: 100 }).withMessage('limit must be 1-100'),
-  query('topic').optional().isIn(TOPICS).withMessage('Invalid topic filter'),
-  query('difficulty').optional().isIn(DIFFICULTIES).withMessage('Invalid difficulty filter'),
-  query('status').optional().isIn(STATUSES).withMessage('Invalid status filter'),
-  query('platform').optional().isIn(PLATFORMS).withMessage('Invalid platform filter'),
-  query('search').optional().isLength({ max: 200 }).withMessage('Search term too long'),
+  // `values: 'falsy'` makes optional() skip empty strings too — the frontend
+  // always sends `?topic=&search=` etc. for inactive filters.
+  query('page').optional({ values: 'falsy' }).custom(toNumber).isInt({ min: 1 }).withMessage('page must be a positive integer'),
+  query('limit').optional({ values: 'falsy' }).custom(toNumber).isInt({ min: 1, max: 100 }).withMessage('limit must be 1-100'),
+  query('topic').optional({ values: 'falsy' }).isIn(TOPICS).withMessage('Invalid topic filter'),
+  query('difficulty').optional({ values: 'falsy' }).isIn(DIFFICULTIES).withMessage('Invalid difficulty filter'),
+  query('status').optional({ values: 'falsy' }).isIn(STATUSES).withMessage('Invalid status filter'),
+  query('platform').optional({ values: 'falsy' }).isIn(PLATFORMS).withMessage('Invalid platform filter'),
+  query('search').optional({ values: 'falsy' }).isLength({ max: 200 }).withMessage('Search term too long'),
 ];
 
 /* ----------------------------- Revisions ----------------------------- */
