@@ -93,6 +93,7 @@ codetrack/
 │   │   ├── test/               # Vitest setup + test files
 │   │   └── utils/              # constants, formatters
 │   ├── .env.example
+│   ├── vercel.json              # SPA rewrites (must live in the Root Directory)
 │   └── vite.config.js          # dev proxy /api → :5000, vitest config
 ├── server/                     # Express REST API
 │   ├── scripts/seedDemo.js     # demo account seeder
@@ -109,7 +110,6 @@ codetrack/
 ├── .env.example                # points at server/.env.example
 ├── .gitignore
 ├── render.yaml                 # Render blueprint (backend)
-├── vercel.json                 # Vercel SPA rewrites + /api proxy (frontend)
 └── README.md                   # this file
 ```
 
@@ -237,9 +237,9 @@ progress math), profile (update, password change), and pure date/streak utils.
    output = `dist`.
 3. Add the environment variable:
    `VITE_API_URL` = `https://<your-render-service>.onrender.com/api`
-4. Deploy. `vercel.json` already handles SPA rewrites and proxies `/api/*` to
-   the Render service — update the destination URL in `vercel.json` if your
-   service name differs.
+4. Deploy. `client/vercel.json` provides the SPA fallback rewrite so deep
+   links work on refresh. No API proxy is needed: the app calls the Render
+   backend directly via `VITE_API_URL`.
 5. After both are live, update `CLIENT_URL` on Render to the final Vercel domain
    (CORS is origin-checked).
 
